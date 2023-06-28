@@ -52,14 +52,23 @@ async getComments(
     const commentsEntities = await this.commentRepository.getComments({size,offset,id,idx});
     const comments: CommentDto[] = [];
 
-    for await (const comment of commentsEntities) {
+    const comment = {
+      idx: comment.idx,
+      mIdx: comment.mIdx,
+      post: comment.post,
+      imageUrl: comment.imageUrl,
+      regId: comment.regId,
+      regDate: comment.regDate,
+      liveDate: comment.liveDate,
+      likeCount: comment.likeCount,
+      collection: collectionDto,
+    };
+
+   for await (const comment of commentsEntities) {
         const c = await this.cRepository.findCollectionById(code);
         const i = await this.iRepository.findCreatorById(code);
       }
-      comments.push(
-        this.articleMapper.toCommentsDto(
-          comment,
-        ),
+      comments.push(comment),
       );
     return {
       comments,
@@ -107,7 +116,7 @@ async getComments(
       }
       comments.push(
         this.articleMapper.toCommentsDto(
-          comment,
+          comment
         ),
       );
     return comments;
