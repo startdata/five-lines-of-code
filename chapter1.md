@@ -53,15 +53,8 @@ async getComments(
     const comments: CommentDto[] = [];
 
     const comment = {
-      idx: comment.idx,
-      mIdx: comment.mIdx,
-      post: comment.post,
-      imageUrl: comment.imageUrl,
-      regId: comment.regId,
-      regDate: comment.regDate,
-      liveDate: comment.liveDate,
-      likeCount: comment.likeCount,
-      collection: collectionDto,
+      idx: commentsEntities.idx,
+      post: commentsEntities.post,
     };
 
    for await (const comment of commentsEntities) {
