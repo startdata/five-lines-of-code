@@ -52,10 +52,12 @@ async getComments(
     const commentsEntities = await this.commentRepository.getComments({size,offset,id,idx});
     const comments: CommentDto[] = [];
 
-    const comment = {
+    const comment = commentsEntities.map(c => {
+      return {
       idx: commentsEntities.idx,
       post: commentsEntities.post,
-    };
+    }
+    });
 
    for await (const comment of commentsEntities) {
         const c = await this.cRepository.findCollectionById(code);
@@ -89,8 +91,8 @@ async getComments(
       id,
       idx,
     });
-    const comments: Promise<CommentDto[]> =
-      this.getCommentsEntity(commentsEntities);
+    const comments: CommentDto[] =
+    this.getCommentsEntity(commentsEntities);
 
     return {
       comments,
@@ -100,7 +102,7 @@ async getComments(
     };
   }
 
-   async getCommentsEntity(commentsEntities): Promise<CommentDto[]> {
+   async getCommentsEntity(commentsEntities): CommentDto[] {
     const comments: CommentDto[] = [];
 
     for await (const comment of commentsEntities) {
