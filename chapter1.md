@@ -117,5 +117,5 @@ async getComments(
         ),
       );
     return comments;
-  }
+ }
 ```
