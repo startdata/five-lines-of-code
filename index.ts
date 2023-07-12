@@ -587,10 +587,20 @@ let map: Tile[][] = [
 
 let inputs: Input[] = [];
 
-function remove(tile: Tile) {
+function removeLock1() {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
-      if (map[y][x] === tile) {
+      if (map[y][x].isLock1()) {
+        map[y][x] = new Air();
+      }
+    }
+  }
+}
+
+function removeLock2() {
+  for (let y = 0; y < map.length; y++) {
+    for (let x = 0; x < map[y].length; x++) {
+      if (map[y][x].isLock2()) {
         map[y][x] = new Air();
       }
     }
@@ -598,31 +608,31 @@ function remove(tile: Tile) {
 }
 
 function moveToTile(newx: number, newy: number) {
-  map[playery][playerx] = Tile.AIR;
-  map[newy][newx] = Tile.PLAYER;
+  map[playery][playerx].isAir();
+  map[newy][newx].isPlay();
   playerx = newx;
   playery = newy;
 }
 
 function moveHorizontal(dx: number) {
   if (
-    map[playery][playerx + dx] === Tile.FLUX ||
-    map[playery][playerx + dx] === Tile.AIR
+    map[playery][playerx + dx].isFlux() ||
+    map[playery][playerx + dx].isAir()
   ) {
     moveToTile(playerx + dx, playery);
   } else if (
-    (map[playery][playerx + dx] === Tile.STONE ||
-      map[playery][playerx + dx] === Tile.BOX) &&
-    map[playery][playerx + dx + dx] === Tile.AIR &&
-    map[playery + 1][playerx + dx] !== Tile.AIR
+    (map[playery][playerx + dx].isStone() ||
+      map[playery][playerx + dx].isBox()) &&
+    map[playery][playerx + dx + dx].isAir() &&
+    !map[playery + 1][playerx + dx].isAir()
   ) {
     map[playery][playerx + dx + dx] = map[playery][playerx + dx];
     moveToTile(playerx + dx, playery);
-  } else if (map[playery][playerx + dx] === Tile.KEY1) {
-    remove(Tile.LOCK1);
+  } else if (map[playery][playerx + dx].isKey1()) {
+    removeLock1();
     moveToTile(playerx + dx, playery);
-  } else if (map[playery][playerx + dx] === Tile.KEY2) {
-    remove(Tile.LOCK2);
+  } else if (map[playery][playerx + dx].isKey2()) {
+    removeLock2();
     moveToTile(playerx + dx, playery);
   }
 }
@@ -634,10 +644,10 @@ function moveVertical(dy: number) {
   ) {
     moveToTile(playerx, playery + dy);
   } else if (map[playery + dy][playerx].isKey1()) {
-    remove(Tile.LOCK1);
+    removeLock1();
     moveToTile(playerx, playery + dy);
-  } else if (map[playery + dy][playerx] === Tile.KEY2) {
-    remove(Tile.LOCK2);
+  } else if (map[playery + dy][playerx].isKey2()) {
+    removeLock2();
     moveToTile(playerx, playery + dy);
   }
 }
