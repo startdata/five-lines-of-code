@@ -626,7 +626,7 @@ function moveToTile(newx: number, newy: number) {
 
 function moveHorizontal(dx: number) {
   if (
-    map[playery][playerx + dx] === Tile.FLUX ||
+    map[playery][playerx + dx].isFlux() ||
     map[playery][playerx + dx] === Tile.AIR
   ) {
     moveToTile(playerx + dx, playery);
